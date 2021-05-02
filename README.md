@@ -1,6 +1,31 @@
 # Sample
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.1.5.
+This lets you serve the angular code + routing the API requuests from the angular code.
+
+const express = require('express');
+const http = require('http');
+const path = require('path');
+const app = express();
+const { createProxyMiddleware } = require('http-proxy-middleware');
+
+const PORT = process.env.PORT || 3000;
+
+app.use(express.static(\_\_dirname + '/dist/sample'));
+
+app.use('/api/\*', createProxyMiddleware({
+target: 'https://jsonplaceholder.typicode.com/', changeOrigin: true, pathRewrite: {
+[`^/api`]: ''
+}
+}));
+
+app.get('/\*', (req, res) => {
+return res.sendFile(path.join(\_\_dirname));
+});
+
+const server = http.createServer(app);
+
+server.listen(PORT, () => console.log(`Server running on ${PORT}....`));
 
 ## Development server
 
